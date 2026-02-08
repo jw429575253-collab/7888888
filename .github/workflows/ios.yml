@@ -16,29 +16,29 @@ jobs:
 
       - name: Generate Xcode Project
         run: xcodegen generate
-        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
+        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
 
       - name: Build (no signing)
         run: |
           xcodebuild \
-            -project ./WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
+            -project ${{ github.workspace }}/WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
             -scheme WorkShiftAlarm \
             -configuration Release \
             -sdk iphoneos \
             CODE_SIGNING_ALLOWED=NO \
             build
-        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
+        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
 
       - name: Archive
         run: |
           xcodebuild \
-            -project ./WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
+            -project ${{ github.workspace }}/WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
             -scheme WorkShiftAlarm \
             -configuration Release \
             -sdk iphoneos \
             -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
             archive
-        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
+        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
 
       - name: Export IPA (requires signing)
         run: |
@@ -46,11 +46,11 @@ jobs:
             -exportArchive \
             -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
             -exportPath $PWD/build \
-            -exportOptionsPlist ./WorkShiftAlarm/ExportOptions.plist   # 使用绝对路径指向 plist 文件
-        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
+            -exportOptionsPlist ${{ github.workspace }}/WorkShiftAlarm/ExportOptions.plist  # 使用 GitHub 工作空间来确保路径正确
+        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: WorkShiftAlarm-ipa
-          path: ./WorkShiftAlarm/build/*.ipa   # 确保此路径指向构建输出的 IPA 文件
+          path: ${{ github.workspace }}/WorkShiftAlarm/build/*.ipa  # 使用 GitHub 工作空间来确保路径正确
