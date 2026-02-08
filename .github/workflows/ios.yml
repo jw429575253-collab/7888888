@@ -16,29 +16,29 @@ jobs:
 
       - name: Generate Xcode Project
         run: xcodegen generate
-        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
+        working-directory: ${{ github.workspace }}/Sources/WorkShiftAlarm   # 修改路径为 Sources/WorkShiftAlarm
 
       - name: Build (no signing)
         run: |
           xcodebuild \
-            -project ${{ github.workspace }}/WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
+            -project ${{ github.workspace }}/Sources/WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
             -scheme WorkShiftAlarm \
             -configuration Release \
             -sdk iphoneos \
             CODE_SIGNING_ALLOWED=NO \
             build
-        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
+        working-directory: ${{ github.workspace }}/Sources/WorkShiftAlarm   # 修改路径为 Sources/WorkShiftAlarm
 
       - name: Archive
         run: |
           xcodebuild \
-            -project ${{ github.workspace }}/WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
+            -project ${{ github.workspace }}/Sources/WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
             -scheme WorkShiftAlarm \
             -configuration Release \
             -sdk iphoneos \
             -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
             archive
-        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
+        working-directory: ${{ github.workspace }}/Sources/WorkShiftAlarm   # 修改路径为 Sources/WorkShiftAlarm
 
       - name: Export IPA (requires signing)
         run: |
@@ -46,11 +46,11 @@ jobs:
             -exportArchive \
             -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
             -exportPath $PWD/build \
-            -exportOptionsPlist ${{ github.workspace }}/WorkShiftAlarm/ExportOptions.plist  # 使用 GitHub 工作空间来确保路径正确
-        working-directory: ${{ github.workspace }}/WorkShiftAlarm  # 使用 GitHub 工作空间来确保路径正确
+            -exportOptionsPlist ${{ github.workspace }}/Sources/WorkShiftAlarm/ExportOptions.plist   # 修改路径为 Sources/WorkShiftAlarm
+        working-directory: ${{ github.workspace }}/Sources/WorkShiftAlarm   # 修改路径为 Sources/WorkShiftAlarm
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: WorkShiftAlarm-ipa
-          path: ${{ github.workspace }}/WorkShiftAlarm/build/*.ipa  # 使用 GitHub 工作空间来确保路径正确
+          path: ${{ github.workspace }}/Sources/WorkShiftAlarm/build/*.ipa   # 修改路径为 Sources/WorkShiftAlarm
