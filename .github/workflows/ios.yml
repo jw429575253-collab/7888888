@@ -1,0 +1,56 @@
+﻿name: iOS Build
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+        working-directory: WorkShiftAlarm
+
+      - name: Build (no signing)
+        run: |
+          xcodebuild \
+            -project WorkShiftAlarm.xcodeproj \
+            -scheme WorkShiftAlarm \
+            -configuration Release \
+            -sdk iphoneos \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+        working-directory: WorkShiftAlarm
+
+      - name: Archive
+        run: |
+          xcodebuild \
+            -project WorkShiftAlarm.xcodeproj \
+            -scheme WorkShiftAlarm \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
+            archive
+        working-directory: WorkShiftAlarm
+
+      - name: Export IPA (requires signing)
+        run: |
+          xcodebuild \
+            -exportArchive \
+            -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
+            -exportPath $PWD/build \
+            -exportOptionsPlist ExportOptions.plist
+        working-directory: WorkShiftAlarm
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WorkShiftAlarm-ipa
+          path: WorkShiftAlarm/build/*.ipa

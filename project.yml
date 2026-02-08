@@ -1,0 +1,38 @@
+﻿name: WorkShiftAlarm
+options:
+  deploymentTarget:
+    iOS: "26.0"
+  minimumXcodeGenVersion: "2.39.0"
+settings:
+  base:
+    PRODUCT_BUNDLE_IDENTIFIER: "com.example.WorkShiftAlarm"
+    ASSETCATALOG_COMPILER_APPICON_NAME: "AppIcon"
+    SWIFT_VERSION: "6.0"
+    CODE_SIGN_STYLE: "Automatic"
+    DEVELOPMENT_TEAM: ""
+packages: {}
+targets:
+  WorkShiftAlarm:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources/WorkShiftAlarm
+    resources:
+      - path: Resources
+    info:
+      path: Sources/WorkShiftAlarm/Info.plist
+    entitlements:
+      path: Sources/WorkShiftAlarm/WorkShiftAlarm.entitlements
+    settings:
+      base:
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_FILE: Sources/WorkShiftAlarm/Info.plist
+schemes:
+  WorkShiftAlarm:
+    build:
+      targets:
+        WorkShiftAlarm: all
+    run:
+      config: Debug
