@@ -16,29 +16,29 @@ jobs:
 
       - name: Generate Xcode Project
         run: xcodegen generate
-        working-directory: WorkShiftAlarm
+        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
 
       - name: Build (no signing)
         run: |
           xcodebuild \
-            -project WorkShiftAlarm.xcodeproj \
+            -project ./WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
             -scheme WorkShiftAlarm \
             -configuration Release \
             -sdk iphoneos \
             CODE_SIGNING_ALLOWED=NO \
             build
-        working-directory: WorkShiftAlarm
+        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
 
       - name: Archive
         run: |
           xcodebuild \
-            -project WorkShiftAlarm.xcodeproj \
+            -project ./WorkShiftAlarm/WorkShiftAlarm.xcodeproj \
             -scheme WorkShiftAlarm \
             -configuration Release \
             -sdk iphoneos \
             -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
             archive
-        working-directory: WorkShiftAlarm
+        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
 
       - name: Export IPA (requires signing)
         run: |
@@ -46,11 +46,11 @@ jobs:
             -exportArchive \
             -archivePath $PWD/build/WorkShiftAlarm.xcarchive \
             -exportPath $PWD/build \
-            -exportOptionsPlist ExportOptions.plist
-        working-directory: WorkShiftAlarm
+            -exportOptionsPlist ./WorkShiftAlarm/ExportOptions.plist   # 使用绝对路径指向 plist 文件
+        working-directory: ./WorkShiftAlarm   # 确保此路径正确指向项目根目录
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: WorkShiftAlarm-ipa
-          path: WorkShiftAlarm/build/*.ipa
+          path: ./WorkShiftAlarm/build/*.ipa   # 确保此路径指向构建输出的 IPA 文件
